@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Lighter_SocialMediaService.Models.Post>
+
+@{
+    ViewData["Title"] = "My Posts";
+}
+
+<h1>My Posts</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Content</th>
+            <th>Likes</th>
+            <th>Created At</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in Model)
+        {
+            <tr>
+                <td>@post.Content</td>
+                <td>@post.LikesCount</td> <!-- Użyj LikesCount tutaj -->
+                <td>@post.CreatedAt.ToString("g")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@post.Id" class="btn btn-info">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

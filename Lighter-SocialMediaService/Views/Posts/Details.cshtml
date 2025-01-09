@@ -1,0 +1,40 @@
+﻿@model Lighter_SocialMediaService.Models.Post
+
+<div class="post-details">
+    <h2>@Model.Content</h2>
+    <p>Autor: @Model.Author</p>
+
+    <!-- Liczba polubień -->
+    <p>Polubienia: <span id="likes-count-@Model.Id">@Model.LikesCount</span></p>
+
+    <!-- Przycisk polubień -->
+    <button class="btn btn-primary" onclick="toggleLike(@Model.Id)">Polub</button>
+</div>
+
+<script>
+    async function toggleLike(postId) {
+        try {
+            // Wyślij żądanie POST do kontrolera
+            const response = await fetch(`/Posts/ToggleLike?postId=${postId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            });
+
+            if (!response.ok) {
+                alert("Wystąpił błąd podczas polubienia posta.");
+                return;
+            }
+
+            // Pobierz odpowiedź jako JSON
+            const data = await response.json();
+
+            // Zaktualizuj licznik polubień
+            document.getElementById(`likes-count-${postId}`).innerText = data.likesCount;
+        } catch (error) {
+            console.error("Błąd:", error);
+            alert("Nie udało się polubić posta.");
+        }
+    }
+</script>

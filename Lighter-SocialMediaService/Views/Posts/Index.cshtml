@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Lighter_SocialMediaService.Models.Post>
+
+@if (!Model.Any())
+{
+    <p>No posts available.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Author</th>
+                <th>Content</th>
+                <th>Likes</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var post in Model)
+            {
+                <tr>
+                    <td>@post.Author</td>
+                    <td>@post.Content</td>
+                    <td>@post.LikesCount</td>
+                    <td>@post.CreatedAt.ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
