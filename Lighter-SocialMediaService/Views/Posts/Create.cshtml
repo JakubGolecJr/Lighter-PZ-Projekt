@@ -1,24 +1,23 @@
 ﻿@model Lighter_SocialMediaService.Models.Post
 
 @{
-    ViewData["Title"] = "Create Post";
+    ViewData["Title"] = "Stwórz post";
 }
 
-<h1>Create Post</h1>
+<div class="create-post-container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Content" class="control-label"></label>
-        <textarea asp-for="Content" class="form-control" rows="5" placeholder="Write your post here..."></textarea>
-        <span asp-validation-for="Content" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-    </div>
-</form>
-
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <form asp-action="Create" method="post" class="create-post-form">
+        <div class="form-group">
+            <label asp-for="Content" class="control-label">Treść posta</label>
+            <textarea asp-for="Content" class="form-control" rows="5" placeholder="Napisz swój post tutaj..."></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+        <div class="form-buttons">
+            <input type="submit" value="Utwórz" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Wróć do listy</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {

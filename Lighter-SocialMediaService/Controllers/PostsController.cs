@@ -17,8 +17,60 @@ namespace Lighter_SocialMediaService.Controllers
             _context = context;
         }
 
-        // Nowa metoda: polubienie lub odpolubienie posta
         [HttpPost]
+        public async Task<IActionResult> AddComment(int postId, string content)
+        {
+            if (string.IsNullOrEmpty(content))
+            {
+                TempData["Error"] = "Komentarz nie może być pusty.";
+                return RedirectToAction(nameof(Details), new { id = postId });
+            }
+
+            if (content.Length > 150)
+            {
+                TempData["Error"] = "Komentarz nie może przekraczać 150 znaków.";
+                return RedirectToAction(nameof(Details), new { id = postId });
+            }
+
+            var post = await _context.Posts.Include(p => p.Comments).FirstOrDefaultAsync(p => p.Id == postId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            string replyTo = null;
+
+            //Sprawdz czy komentarz ma nick użytkownika
+            if (content.StartsWith("@"))
+            {
+                var parts = content.Split(new[] { ' ' }, 2);
+                if (parts.Length > 1 && parts[0].EndsWith("-"))
+                {
+                    replyTo = parts[0].TrimEnd('-');
+                    content = parts.Length > 1 ? parts[1].Trim() : "";
+                }
+            }
+
+            //Tworzenie nicku do tworzenia posta
+            var email = User.Identity?.Name ?? "Anonymous";
+            var author = email.Contains("@") ? email.Split('@')[0] : email;
+
+            var comment = new Comment
+            {
+                Content = content,
+                Author = author,
+                PostId = postId,
+                ReplyTo = replyTo ?? string.Empty
+            };
+
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = postId });
+        }
+
+        [HttpPost]
+        //Lajki
         public async Task<IActionResult> ToggleLike(int postId)
         {
             var post = await _context.Posts.FindAsync(postId);
@@ -27,26 +79,26 @@ namespace Lighter_SocialMediaService.Controllers
                 return NotFound();
             }
 
-            var userId = User.Identity.Name; // Identyfikator użytkownika
+            var userId = User.Identity.Name;
             var existingLike = await _context.Likes
                 .FirstOrDefaultAsync(like => like.PostId == postId && like.UserId == userId);
 
             if (existingLike != null)
             {
-                // Usuń istniejące polubienie
+                //Odlub
                 _context.Likes.Remove(existingLike);
-                post.LikesCount--; // Zmniejsz licznik
+                post.LikesCount--;
             }
             else
             {
-                // Dodaj nowe polubienie
+                //Polub
                 var like = new Like
                 {
                     PostId = postId,
                     UserId = userId
                 };
                 _context.Likes.Add(like);
-                post.LikesCount++; // Zwiększ licznik
+                post.LikesCount++;
             }
 
             await _context.SaveChangesAsync();
@@ -55,9 +107,10 @@ namespace Lighter_SocialMediaService.Controllers
         }
 
         // GET: Posts
+        //Pod dodaniu posta przenies na Latest (jak na wykopie)
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Posts.ToListAsync());
+            return RedirectToAction(nameof(Latest));
         }
 
         // GET: Posts/Details/5
@@ -76,6 +129,11 @@ namespace Lighter_SocialMediaService.Controllers
                 return NotFound();
             }
 
+            if (TempData["Error"] != null)
+            {
+                ViewBag.Error = TempData["Error"];
+            }
+
             return View(post);
         }
 
@@ -90,14 +148,23 @@ namespace Lighter_SocialMediaService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Content")] Post post)
         {
-            Console.WriteLine($"Logged-in user's email: {User.Identity?.Name}");
-
-            // Pobranie emaila użytkownika lub ustawienie "Anonymous" dla niezalogowanych
+            //Tworzenie nicku
             var email = User.Identity?.Name ?? "Anonymous";
-            post.SetAuthor(email); // Ustawienie autora
+            post.SetAuthor(email);
 
-            // Usunięcie walidacji pola Author, ponieważ jest ustawiane automatycznie
             ModelState.Remove("Author");
+
+            if (string.IsNullOrEmpty(post.Content))
+            {
+                ViewBag.Error = "Post nie może być pusty.";
+                return View(post);
+            }
+
+            if (post.Content.Length > 380)
+            {
+                ViewBag.Error = "Post nie może przekraczać 380 znaków.";
+                return View(post);
+            }
 
             if (ModelState.IsValid)
             {
@@ -105,8 +172,6 @@ namespace Lighter_SocialMediaService.Controllers
                 {
                     _context.Add(post);
                     await _context.SaveChangesAsync();
-
-                    Console.WriteLine($"Post saved successfully. Author: {post.Author}");
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -114,19 +179,12 @@ namespace Lighter_SocialMediaService.Controllers
                     Console.WriteLine($"Error saving post: {ex.Message}");
                 }
             }
-            else
-            {
-                Console.WriteLine("ModelState is invalid.");
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine($"Validation error: {error.ErrorMessage}");
-                }
-            }
 
             return View(post);
         }
 
         // GET: Posts/Popular
+        //Listuje posty od najpopularniejszych
         public async Task<IActionResult> Popular()
         {
             var posts = await _context.Posts
@@ -136,6 +194,7 @@ namespace Lighter_SocialMediaService.Controllers
         }
 
         // GET: Posts/Latest
+        //Listuje posty od daty (CreatedAt) najnowsze
         public async Task<IActionResult> Latest()
         {
             var posts = await _context.Posts
@@ -147,7 +206,7 @@ namespace Lighter_SocialMediaService.Controllers
         // GET: Posts/MyPosts
         public async Task<IActionResult> MyPosts()
         {
-            // Pobranie emaila użytkownika i przetworzenie na nazwę przed "@"
+            //Tworzenie nicku
             var email = User.Identity?.Name ?? "Anonymous";
             var author = email.Contains("@") ? email.Split('@')[0] : email;
 

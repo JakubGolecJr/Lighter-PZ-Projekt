@@ -10,14 +10,13 @@ namespace Lighter_SocialMediaService.Models
 
         [Required(ErrorMessage = "Wpis jest pusty, uzupełnij pole.")]
         [StringLength(380, ErrorMessage = "Długość posta nie może przekroczyć 380 znaków.")]
-        public string Content { get; set; } // Treść wpisu
-        public string Author { get; private set; } // Email bez domeny (ustawiane automatycznie
+        public string Content { get; set; }
+        public string Author { get; private set; }
         public int LikesCount { get; set; } = 0;
-        public DateTime CreatedAt { get; private set; } = DateTime.UtcNow; // Automatyczna data utworzenia w UTC
+        public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
         public List<Comment> Comments { get; set; } = new List<Comment>();
 
 
-        // Metoda do ustawiania autora
         public void SetAuthor(string email)
         {
             if (string.IsNullOrEmpty(email))
@@ -26,11 +25,10 @@ namespace Lighter_SocialMediaService.Models
             }
             else
             {
-                Author = email.Contains("@") ? email.Split('@')[0] : email; // Wyodrębnia nazwę przed '@'
+                Author = email.Contains("@") ? email.Split('@')[0] : email; //tworzenie nicku
             }
         }
 
-        // Metoda do dodawania polubień
         public void AddLike()
         {
             LikesCount++;
@@ -40,13 +38,19 @@ namespace Lighter_SocialMediaService.Models
     public class Comment
     {
         public int Id { get; set; }
+
         [Required(ErrorMessage = "Treść komentarza jest wymagana.")]
-        [StringLength(300, ErrorMessage = "Komentarz nie może przekraczać 300 znaków.")]
-        public string Content { get; set; } // Treść komentarza
+        [StringLength(150, ErrorMessage = "Komentarz nie może przekraczać 150 znaków.")]
+        public string Content { get; set; }
+
         [Required(ErrorMessage = "Autor komentarza jest wymagany.")]
-        public string Author { get; set; } // Autor komentarza
-        public int PostId { get; set; } // ID powiązanego posta
-        public Post Post { get; set; } // Powiązany post
-        public DateTime CreatedAt { get; private set; } = DateTime.Now; // Automatyczna data utworzenia
+        public string Author { get; set; }
+
+        public int PostId { get; set; }
+        public Post Post { get; set; }
+
+        public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+
+        public string ReplyTo { get; set; }
     }
 }

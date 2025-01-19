@@ -2,7 +2,7 @@
 
 @if (!Model.Any())
 {
-    <p>No posts available.</p>
+    <p>Brak dostępnych postów.</p>
 }
 else
 {
@@ -28,3 +28,7 @@ else
         </tbody>
     </table>
 }
+
+<a href="/Posts/Create" class="floating-button">
+    <span>+</span>
+</a>

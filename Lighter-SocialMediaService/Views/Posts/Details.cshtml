@@ -1,20 +1,55 @@
 ﻿@model Lighter_SocialMediaService.Models.Post
 
-<div class="post-details">
-    <h2>@Model.Content</h2>
-    <p>Autor: @Model.Author</p>
+<div class="post-details-box">
+    <!-- Data/autor -->
+    <div class="post-header">
+        <span class="post-author">@Model.Author</span>
+        <span class="post-date">@Model.CreatedAt.ToString("g")</span>
+    </div>
 
-    <!-- Liczba polubień -->
-    <p>Polubienia: <span id="likes-count-@Model.Id">@Model.LikesCount</span></p>
+    <!-- Tresc -->
+    <div class="post-content">
+        <p>@Model.Content</p>
+    </div>
 
-    <!-- Przycisk polubień -->
-    <button class="btn btn-primary" onclick="toggleLike(@Model.Id)">Polub</button>
+    <!-- Liczba polubień i przycisk -->
+    <div class="post-footer">
+        <span class="post-likes">❤️ <span id="likes-count-@Model.Id">@Model.LikesCount</span></span>
+        <button class="btn btn-sm custom-details-button" onclick="toggleLike(@Model.Id)">Polub</button>
+
+    </div>
 </div>
+
+<!-- Komentarze -->
+<h3 class="comments-title">Komentarze</h3>
+<div class="comments-container">
+    <ul>
+        @foreach (var comment in Model.Comments)
+        {
+            <li class="comment-box">
+                <strong class="comment-author">@comment.Author</strong>
+                <span class="comment-date">@comment.CreatedAt.ToLocalTime()</span>
+                <p class="comment-content">@comment.Content</p>
+                <button type="button" class="btn btn-link reply-btn" data-author="@comment.Author">Odpowiedz</button>
+            </li>
+        }
+    </ul>
+</div>
+
+<!-- Dodawanie komentarzy -->
+<hr />
+<form asp-action="AddComment" method="post" class="comment-form">
+    <input type="hidden" name="postId" value="@Model.Id" />
+    <div class="form-group">
+        <textarea name="content" class="form-control" placeholder="Dodaj komentarz (maks. 150 znaków)" maxlength="150"></textarea>
+    </div>
+    <button type="submit" class="btn btn-sm custom-details-button">Dodaj komentarz</button>
+
+</form>
 
 <script>
     async function toggleLike(postId) {
         try {
-            // Wyślij żądanie POST do kontrolera
             const response = await fetch(`/Posts/ToggleLike?postId=${postId}`, {
                 method: 'POST',
                 headers: {
@@ -27,14 +62,39 @@
                 return;
             }
 
-            // Pobierz odpowiedź jako JSON
             const data = await response.json();
-
-            // Zaktualizuj licznik polubień
             document.getElementById(`likes-count-${postId}`).innerText = data.likesCount;
         } catch (error) {
             console.error("Błąd:", error);
             alert("Nie udało się polubić posta.");
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const replyButtons = document.querySelectorAll('.reply-btn');
+        const textarea = document.querySelector('textarea[name="content"]');
+
+        replyButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const author = this.getAttribute('data-author');
+                if (!textarea.value.includes(`@@${author}`)) {
+                    textarea.value = `@@${author} - ` + textarea.value;
+                    textarea.focus();
+                }
+            });
+        });
+    });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const textarea = this.querySelector('textarea[name="content"]');
+        const content = textarea.value.trim();
+
+        if (!content) {
+            alert('Treść komentarza nie może być pusta!');
+            e.preventDefault();
+        } else if (content.length > 150) {
+            alert('Komentarz nie może przekraczać 150 znaków!');
+            e.preventDefault();
+        }
+    });
 </script>

@@ -1,33 +1,32 @@
 ﻿@model IEnumerable<Lighter_SocialMediaService.Models.Post>
 
 @{
-    ViewData["Title"] = "Latest Posts";
+    ViewData["Title"] = "Ostatnie posty";
 }
 
-<h1>Latest Posts</h1>
+<h1 class="text-center">@ViewData["Title"]</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Author</th>
-            <th>Content</th>
-            <th>Likes</th>
-            <th>Created At</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var post in Model)
-        {
-            <tr>
-                <td>@post.Author</td>
-                <td>@post.Content</td>
-                <td>@post.LikesCount</td> <!-- Użyj LikesCount tutaj -->
-                <td>@post.CreatedAt.ToString("g")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@post.Id" class="btn btn-info">Details</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="posts-container">
+    @foreach (var post in Model)
+    {
+        <div class="post-box">
+            <div class="post-header">
+                <span class="post-author">@post.Author</span>
+                <span class="post-date">@post.CreatedAt.ToString("g")</span>
+            </div>
+            <div class="post-content">
+                <p>@post.Content</p>
+            </div>
+            <div class="post-footer">
+                <span class="post-likes">❤️ @post.LikesCount</span>
+                <a asp-action="Details" asp-route-id="@post.Id" class="btn btn-sm custom-details-button">Przejdź do posta</a>
+
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Przycisk plusa -->
+<a href="/Posts/Create" class="floating-button">
+    <span>+</span>
+</a>

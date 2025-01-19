@@ -1,8 +1,42 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Lighter - Twój serwis społecznościowy";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Witaj na Lighter!</h1>
+    <p class="lead">
+        Lighter to nowoczesny, prosty w obsłudze serwis społecznościowy,
+        który pozwala Ci wyrazić siebie i połączyć się z innymi.
+    </p>
+
+    <hr class="my-4" />
+
+    <div>
+        <h2>Dlaczego warto korzystać z Lighter?</h2>
+        <ul class="list-unstyled">
+            <li><strong>🔗 Łatwość użycia:</strong> Przyjazny interfejs sprawia, że każdy użytkownik poczuje się tu jak w domu.</li>
+            <li><strong>🌍 Dziel się pomysłami:</strong> Publikuj swoje przemyślenia i inspiruj innych.</li>
+            <li><strong>📈 Popularne treści:</strong> Odkryj, co jest na topie dzięki sekcji najpopularniejszych postów.</li>
+            <li><strong>💬 Rozmowy bez granic:</strong> Komentuj posty innych i prowadź inspirujące dyskusje.</li>
+            <li><strong>❤️ Znajdź ulubione treści:</strong> Lajkuj posty lub twórz viralowe treści, aby znaleść się na górze w "Popularne"!</li>
+        </ul>
+    </div>
+
+    <hr class="my-4" />
+
+    <div>
+        <h3>Gotowy na nową przygodę?</h3>
+        <p>
+            Zacznij od przeglądania najpopularniejszych postów w naszej społeczności.
+            Wybierz te, które najbardziej Cię interesują, polub je i dodaj swój komentarz!
+        </p>
+        <a href="/Posts/Popular" class="btn btn-sm custom-details-button">
+            Przejdź do popularnych postów
+        </a>
+    </div>
 </div>
+
+<!-- Przycisk plusa -->
+<a href="/Posts/Create" class="floating-button">
+    <span>+</span>
+</a>

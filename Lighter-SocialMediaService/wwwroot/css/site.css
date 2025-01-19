@@ -1,22 +1,338 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 html {
-  position: relative;
-  min-height: 100%;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    color: #cc3355;
+
+    @media (min-width: 768px) {
+        html {
+            font-size: 16px;
+        }
+    }
+
+    .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #fdfdfd;
 }
+
+main {
+    flex: 1;
+    margin-top: 20px;
+}
+
+/* Przycisk plusa */
+.floating-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 100px;
+    height: 100px;
+    background-color: #cc3355;
+    color: #ffffff;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 60px;
+    font-weight: bold;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+    .floating-button:hover {
+        transform: scale(1.2);
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .floating-button span {
+        display: block;
+        line-height: 0;
+        font-size: inherit;
+        text-align: center;
+        margin-top: -12px;
+    }
+
+/* Sticky stopa strony */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    background-color: #333333;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem 0;
+    letter-spacing: 1.5px;
+    margin-top: auto;
+}
+
+    footer hr {
+        border-color: #ffffff;
+    }
+
+/* Logo */
+.custom-lighter-brand {
+    background-color: #cc3355;
+    color: #ffffff;
+    padding: 20px 40px;
+    border: none;
+    border-radius: 0;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+    .custom-lighter-brand:hover {
+        background-color: #b02b4a;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+/* Kontener na posty */
+.posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+/* Pojedynczy post */
+.post-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #666;
+}
+
+.post-content {
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.post-likes {
+    font-size: 1rem;
+    color: #cc3355;
+    font-weight: bold;
+}
+
+.post-box .btn-info {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+}
+
+.post-details-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+/* Komentarze */
+.comments-container {
+    margin-top: 20px;
+}
+
+.comment-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.comment-author {
+    font-weight: bold;
+    color: #333;
+}
+
+.comment-date {
+    font-size: 0.8rem;
+    color: #888;
+    margin-left: 10px;
+}
+
+.comment-content {
+    margin: 10px 0;
+    color: #555;
+}
+
+.comment-form textarea {
+    margin-bottom: 10px;
+}
+
+/* Kontener - Create */
+.create-post-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.create-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+    .create-post-form .form-group textarea {
+        resize: none;
+        font-size: 1rem;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .create-post-form .form-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .create-post-form .btn-primary {
+        background-color: #cc3355;
+        border-color: #cc3355;
+        font-weight: bold;
+    }
+
+        .create-post-form .btn-primary:hover {
+            background-color: #b02b4a;
+            border-color: #b02b4a;
+        }
+
+    .create-post-form .btn-secondary {
+        background-color: #e0e0e0;
+        border-color: #e0e0e0;
+        color: #333;
+    }
+
+        .create-post-form .btn-secondary:hover {
+            background-color: #d6d6d6;
+            border-color: #d6d6d6;
+        }
+
+/* Nag³ówek */
+.custom-header {
+    background-color: #cc3355;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+}
+
+    /* Logo Lighter */
+    .custom-header .navbar-brand {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+        .custom-header .navbar-brand:hover {
+            color: #f5f5f5;
+        }
+
+    /* Linki nawigacyjne */
+    .custom-header .nav-link {
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 500;
+        position: relative;
+        margin-right: 15px;
+        text-transform: uppercase;
+        transition: color 0.3s ease;
+    }
+
+        .custom-header .nav-link:hover {
+            color: #ffffff;
+        }
+
+/* Pasek animacji na hover */
+.nav-animated::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background-color: #ffffff;
+    width: 0;
+    transition: width 0.3s ease-in-out;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+}
+
+.nav-animated:hover::after {
+    width: 100%;
+}
+
+/* Styl przycisków "PrzejdŸ do posta", "Polub", "Dodaj komentarz" */
+.custom-details-button {
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+    .custom-details-button:hover {
+        background-color: #444444;
+        transform: scale(1.05);
+    }
